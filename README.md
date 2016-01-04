@@ -17,7 +17,7 @@ For events that happen whilst the bundle is offline the Beam API can be pulled a
 
 
 # Installation
-1. Install to `nodecg/bundles/lange-notify`
+1. Install to `nodecg/bundles/nodecg-beam`
 2. Create a config file in `nodecg/cfg/` called `nodecg-beam.json`
 3. Add the channels you wish to track with e.g.
 ```
