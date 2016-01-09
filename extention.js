@@ -8,7 +8,7 @@ module.exports = function (extensionApi) {
 	nodecg = extensionApi;
 
 	if (!Object.keys(nodecg.bundleConfig).length) {
-		throw new Error('No config found in cfg/lfg-twitch.json, aborting!');
+		throw new Error('No config found in cfg/nodecg-beam.json, aborting!');
 	}
 
 	if (!nodecg.bundleConfig.channels) {
