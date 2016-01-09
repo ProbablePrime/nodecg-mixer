@@ -7,7 +7,7 @@ This is a [NodeCG](http://github.com/nodecg/nodecg) bundle.
 
 ## Events
 - [X] Follow
-- [ ] Sub
+- [X] Sub -Thanks so much NonGenericName
 - [X] Misc Update Events
 - [ ] Status
 - [ ] Polls
