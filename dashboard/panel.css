@@ -1,0 +1,53 @@
+.nodecg-beam .sub {
+  padding: 4px 35px 4px 6px;
+  margin-bottom: 2px;
+  overflow-wrap: break-word;
+}
+.nodecg-beam .column {
+  width: 100%;
+  margin: 0 4px;
+}
+.nodecg-beam .column:first-of-type {
+  margin-right: 4px;
+  margin-left: 0;
+}
+.nodecg-beam .column:last-of-type {
+  margin-right: 0;
+  margin-left: 4px;
+}
+.nodecg-beam .log {
+  font-size: 12px;
+  width: 100%;
+  min-height: 51px;
+  max-height: 250px;
+  resize: none;
+  border: 1px solid #a8a8a8;
+  background-color: #f4f4f4;
+  overflow-y: scroll;
+  margin-bottom: 8px;
+}
+.nodecg-beam .log-message {
+  width: 100%;
+  padding: 0 3px;
+}
+.nodecg-beam .log-message:nth-child(even) {
+  background-color: #DDDDDD;
+}
+#nodecg-beam_list {
+  max-height: 250px;
+  overflow-y: scroll;
+  margin-bottom: 4px;
+}
+.fa-alert-button {
+  margin-top:-3px;
+  margin-right:10px;
+}
+.fa-alert-button span {
+  font-size:15px;
+}
+
+.fa-beam {
+  background: url('/view/nodecg-beam/img/beam.png') no-repeat;
+  background-size: 20px 20px;
+  height:20px;
+}
