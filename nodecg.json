@@ -1,6 +1,6 @@
 {
     "name": "nodecg-beam",
-    "version": "0.0.1",
+    "version": "1.0.0",
     "nodecgDependency": "~0.6.0",
     "description": "Hook into Beam Events and emit them to NodeCG channels",
     "authors": [
