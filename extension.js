@@ -25,12 +25,26 @@ module.exports = function (extensionApi) {
 	}
 
 	function log(msg) {
-		console.log(msg);
+		nodcg.log.info(msg);
 		nodecg.sendMessage('log',msg);
 	}
 
+	function followExists(username,channel) {
+		if(nodecg.bundleConfig.debug) {
+			return false;
+		}
+		return history.eventExists(username,channel,'follow');
+	}
+
+	function subExists(username,channel,ts) {
+		if(nodecg.bundleConfig.debug) {
+			return false;
+		}
+		return history.eventExists(username,channel,'sub', ts);
+	}
+
 	var onFollow = function(channel,username) {
-		//if(!history.eventExists(username,channel,'follow')) {
+		if(!followExists(username,channel)) {
 			var content = {
 				name: username,
 				channel: channel,
@@ -39,11 +53,11 @@ module.exports = function (extensionApi) {
 			log('follow ' + username);
 			nodecg.sendMessage('follow', content);
 			history.add(username, channel, 'follow');
-		//}
+		}
 	};
 
 	var onSub = function(channel,username,ts) {
-		//if(!history.eventExists(username,channel,'sub',ts)) {
+		if(!subExists(username,channel,ts)) {
 			var content = {
 				name: username,
 				channel: channel,
@@ -52,7 +66,7 @@ module.exports = function (extensionApi) {
 			log('Sub ' + username);
 			nodecg.sendMessage('subscription', content);
 			history.add(username, channel, 'sub', ts);
-		//}
+		}
 	};
 
 	var onUpdate = function(channel,data) {
