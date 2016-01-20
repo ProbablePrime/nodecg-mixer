@@ -1,8 +1,10 @@
 {
   "name": "nodecg-beam",
-  "version": "1.0.0",
-  "description": "",
-  "main": "extention.js",
+  "version": "2.0.0",
+  "homepage": "http://probableprime.co.uk",
+  "author": "Richard Fox",
+  "description": "Hook into Beam Events and emit them to NodeCG channels",
+  "license": "GPL",
   "dependencies": {
     "beam-client-node": "^0.1.0",
     "bluebird": "^3.1.1",
@@ -10,10 +12,16 @@
     "ws": "^1.0.1",
     "wsabi-client": "^1.0.3"
   },
-  "devDependencies": {},
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "author": "Richard Fox",
-  "license": "GPL"
+  "nodecg": {
+    "compatibleRange": "~0.7.0",
+    "dashboardPanels": [
+      {
+        "name": "beam",
+        "title": "Beam.pro Events",
+        "width": 4,
+        "headerColor": "#262262",
+        "file": "panel.html"
+      }
+    ]
+  }
 }

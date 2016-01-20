@@ -3,19 +3,19 @@
   margin-bottom: 2px;
   overflow-wrap: break-word;
 }
-.nodecg-beam .column {
+.beam-panel .column {
   width: 100%;
   margin: 0 4px;
 }
-.nodecg-beam .column:first-of-type {
+.beam-panel .column:first-of-type {
   margin-right: 4px;
   margin-left: 0;
 }
-.nodecg-beam .column:last-of-type {
+.beam-panel .column:last-of-type {
   margin-right: 0;
   margin-left: 4px;
 }
-.nodecg-beam .log {
+.log {
   font-size: 12px;
   width: 100%;
   min-height: 51px;
@@ -25,12 +25,10 @@
   background-color: #f4f4f4;
   overflow-y: scroll;
   margin-bottom: 8px;
+  padding:2px;
 }
-.nodecg-beam .log-message {
-  width: 100%;
-  padding: 0 3px;
-}
-.nodecg-beam .log-message:nth-child(even) {
+
+.log-message:nth-child(even) {
   background-color: #DDDDDD;
 }
 #nodecg-beam_list {
@@ -51,3 +49,25 @@
   background-size: 20px 20px;
   height:20px;
 }
+
+.log {
+  width:300px;
+  height:200px;
+  overflow:auto;
+  background-color:#CCC;
+}
+
+.beam-list {
+  margin-bottom: 4px;
+  font-size:0.8em;
+}
+
+.beam-list paper-icon {
+  width:35px;
+  height:35px;
+}
+
+.beam-list paper-item {
+  min-height:0px;
+}
+

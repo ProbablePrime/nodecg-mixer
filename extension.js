@@ -30,7 +30,7 @@ module.exports = function (extensionApi) {
 	}
 
 	var onFollow = function(channel,username) {
-		if(!history.eventExists(username,channel,'follow')) {
+		//if(!history.eventExists(username,channel,'follow')) {
 			var content = {
 				name: username,
 				channel: channel,
@@ -39,11 +39,11 @@ module.exports = function (extensionApi) {
 			log('follow ' + username);
 			nodecg.sendMessage('follow', content);
 			history.add(username, channel, 'follow');
-		}
+		//}
 	};
 
 	var onSub = function(channel,username,ts) {
-		if(!history.eventExists(username,channel,'sub',ts)) {
+		//if(!history.eventExists(username,channel,'sub',ts)) {
 			var content = {
 				name: username,
 				channel: channel,
@@ -52,7 +52,7 @@ module.exports = function (extensionApi) {
 			log('Sub ' + username);
 			nodecg.sendMessage('subscription', content);
 			history.add(username, channel, 'sub', ts);
-		}
+		//}
 	};
 
 	var onUpdate = function(channel,data) {

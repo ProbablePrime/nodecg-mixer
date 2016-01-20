@@ -1,32 +1,170 @@
-<div style="display: flex;" class="beam-panel">
-  <div class="column">
-    <div class="btn-group btn-group-justified">
-      <div class="btn-group">
-        <!-- <button type="button" class="ctrl-test btn btn-xs btn-primary">test</button> -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <script src="components/webcomponentsjs/webcomponents-lite.min.js"></script>
+    <link rel="stylesheet" href="components/paper-styles/paper-styles.html">
+    <link rel="import" href="components/iron-icons/iron-icons.html">
+    <link rel="import" href="components/paper-icon-button/paper-icon-button.html">
+    <link rel="import" href="components/paper-button/paper-button.html">
+    <link rel="import" href="components/paper-listbox/paper-listbox.html">
+    <link rel="import" href="components/paper-item/paper-item.html">
+    <link rel="stylesheet" href="panel.css">
+    <script src="components/jquery/dist/jquery.min.js"></script>
+
+    <style>
+    </style>
+</head>
+<body>
+  <div style="display: flex;" class="beam-panel">
+    <div class="column">
+      <div class="btn-group btn-group-justified">
+        <div class="btn-group">
+          <!-- <button type="button" class="ctrl-test btn btn-xs btn-primary">test</button> -->
+        </div>
+      </div>
+      <h4 class="ncg-label">Debug Logs</h4>
+      <div class="log"></div>
+      <div class="btn-group btn-group-justified">
+        <div class="btn-group">
+          <paper-button raised>Clear Logs</paper-button>
+          <paper-button raised class="ctrl-test">TEST</paper-button>
+        </div>
       </div>
     </div>
-    <div class="ncg-label">Debug Logs</div>
-    <div class="log"></div>
-    <div class="btn-group btn-group-justified">
-      <div class="btn-group">
-        <button type="button" class="ctrl-clearLogs btn btn-xs btn-danger">Clear Logs</button>
+    <div class="column">
+      <h4 style="margin-top: 0;" class="ncg-label">Recent Subs</h4>
+      <paper-listbox id="sub_list" class="beam-list">
+      </paper-listbox>
+      <div class="btn-group btn-group-justified">
+        <div class="btn-group">
+          <paper-button raised id="clearall_sub">Clear All</paper-button>
+        </div>
+      </div>
+      <h4 style="margin-top: 0;" class="ncg-label">Recent Follows</h4>
+      <paper-listbox id="follow_list" class="beam-list">
+      </paper-listbox>
+      <div class="btn-group btn-group-justified">
+        <div class="btn-group">
+          <paper-button raised id="clearall_follow">Clear All</paper-button>
+        </div>
       </div>
     </div>
   </div>
-  <div class="column">
-    <div style="margin-top: 0;" class="ncg-label">Recent Subs</div>
-    <div id="nodecg-beam_sub_list"></div>
-    <div class="btn-group btn-group-justified">
-      <div class="btn-group">
-        <button id="nodecg-beam_clearall_sub" type="button" class="btn btn-xs btn-danger">Clear All</button>
-      </div>
-    </div>
-    <div style="margin-top: 0;" class="ncg-label">Recent Follows</div>
-    <div id="nodecg-beam_follow_list"></div>
-    <div class="btn-group btn-group-justified">
-      <div class="btn-group">
-        <button id="nodecg-beam_clearall_follow" type="button" class="btn btn-xs btn-danger">Clear All</button>
-      </div>
-    </div>
-  </div>
-</div>
+<script>
+
+  (function ($) {
+    'use strict';
+    var $panel = $(document).find('.beam-panel');
+    var $reconnect = $panel.find('.ctrl-reconnect');
+    var $logs = $panel.find('.log');
+    var $clearLogs = $panel.find('.ctrl-clearLogs');
+
+    var $test = $panel.find('.ctrl-test');
+
+    var MAX_LOG_LEN = 30;
+
+    nodecg.listenFor('subscription', addSub);
+    nodecg.listenFor('follow', addFollow);
+
+    nodecg.listenFor('log', function(msg) {
+        $logs.append('<div class="log-message">' + msg + '</div>');
+
+        var $children = $logs.children();
+        var len = $children.length;
+        if (len > MAX_LOG_LEN) {
+            var $toDelete = $children.slice(0, len - MAX_LOG_LEN);
+            $toDelete.remove();
+        }
+
+        $logs.animate({ scrollTop: $logs[0].scrollHeight}, 1000);
+    });
+
+    var button =
+        '<paper-icon-button class="alert-control" data-command="hide" icon="close"></paper-icon-button>'+
+        '<paper-icon-button class="alert-control" data-command="resend" icon="autorenew"></paper-icon-button>';
+
+    function addSub(note) {
+        if(note.replay !== undefined && note.replay) {
+            return;
+        }
+        var alert =
+            '<paper-item class="sub">' +
+                '<paper-item-body>'+
+                    '<strong>' + note.name +'</strong>' + (note.resub ? ' - Resub ×' + note.months : '') +
+                '</paper-item-body>' +
+                button +
+            '</paper-item>';
+        var $alert  = $(alert);
+        $alert.data('note',note);
+        $alert.find(".alert-control").on("click", function(e){
+            var target = $(e.currentTarget);
+            var alert = target.closest('paper-item');
+            var command = target.data('command');
+            var note = alert.data('note');
+            note.replay = true;
+            if(command == 'resend') {
+                nodecg.sendMessage('subscription', note)
+            }
+            if(command == 'hide') {
+                alert.remove();
+            }
+        })
+        $('#sub_list').prepend($alert);
+    }
+    function addFollow(note) {
+        if(note.replay !== undefined && note.replay) {
+            return;
+        }
+        var alert =
+            '<paper-item class="follow">' +
+                '<paper-item-body>'+
+                    '<strong>' + note.name +'</strong>' + (note.resub ? ' - Resub ×' + note.months : '') +
+                '</paper-item-body>' +
+                button +
+            '</paper-item>';
+        var $alert  = $(alert);
+        $alert.data('note',note);
+        $alert.find(".alert-control").on("click", function(e){
+            var target = $(e.currentTarget);
+            var alert = target.closest('paper-item');
+            var command = target.data('command');
+            var note = alert.data('note');
+            note.replay = true;
+            if(command == 'resend') {
+                nodecg.sendMessage('follow', note)
+            }
+            if(command == 'hide') {
+                alert.remove();
+            }
+        })
+        $('#follow_list').prepend($alert);
+    }
+
+    $('#clearall_sub').click(function() {
+        $('#sub_list').find('paper-item').remove();
+    });
+    $('#clearall_follow').click(function() {
+        $('#follow_list').find('paper-item').remove();
+    });
+
+    $clearLogs.click(function() {
+       $logs.children().remove();
+    });
+
+
+    $test.on("click",function(){
+        addFollow({
+            name:'Test'+Date.now(),
+            ts: Date.now()
+        });
+        addSub({
+            name:'Test'+Date.now(),
+            ts: Date.now()
+        });
+    });
+  }(jQuery));
+</script>
+</body>
+</html>
