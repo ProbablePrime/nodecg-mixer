@@ -30,7 +30,7 @@ For events that happen whilst the bundle is offline the Beam API can be pulled a
 
 This module does nothing by itself. To use it for alerts and other media you need to listen to the events it outputs.
 
-Checkout [prime-alerts](https://github.com/ProbablePrime/prime-alerts] for a basic example
+Checkout [prime-alerts](https://github.com/ProbablePrime/prime-alerts) for a basic example
 
 ## Follow
 ```
