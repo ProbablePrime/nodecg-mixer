@@ -1,7 +1,7 @@
 # nodecg-beam
 Hook into Beam Events and emit them to NodeCG Compatible channels.
 
-This is a [NodeCG](http://github.com/nodecg/nodecg) bundle.
+This is a [NodeCG](http://github.com/nodecg/nodecg) 0.7 bundle.
 
 # TODO
 
@@ -29,6 +29,8 @@ For events that happen whilst the bundle is offline the Beam API can be pulled a
 # Use 
 
 This module does nothing by itself. To use it for alerts and other media you need to listen to the events it outputs.
+
+Checkout [prime-alerts](https://github.com/ProbablePrime/prime-alerts] for a basic example
 
 ## Follow
 ```
