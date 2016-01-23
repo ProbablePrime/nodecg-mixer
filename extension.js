@@ -25,7 +25,7 @@ module.exports = function (extensionApi) {
 	}
 
 	function log(msg) {
-		nodcg.log.info(msg);
+		nodecg.log.info(msg);
 		nodecg.sendMessage('log',msg);
 	}
 
