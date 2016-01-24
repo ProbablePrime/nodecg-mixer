@@ -1,12 +1,13 @@
 {
   "name": "nodecg-beam",
-  "version": "2.0.0",
+  "version": "3.0.0",
   "homepage": "http://probableprime.co.uk",
   "author": "Richard Fox",
   "description": "Hook into Beam Events and emit them to NodeCG channels",
   "license": "GPL",
   "dependencies": {
     "beam-client-node": "^0.1.0",
+    "bluebird": "^3.1.2",
     "node-localstorage": "^1.0.0",
     "wsabi-client-bacon": "^0.1.1"
   },

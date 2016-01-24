@@ -7,7 +7,6 @@ var channelCache = {};
 var Beam = require('beam-client-node');
 
 var LiveLoading = require('./lib/Live.js');
-var history = require('./lib/History.js');
 
 var live;
 
@@ -29,44 +28,25 @@ module.exports = function (extensionApi) {
 		nodecg.sendMessage('log',msg);
 	}
 
-	function followExists(username,channel) {
-		if(nodecg.bundleConfig.debug) {
-			return false;
-		}
-		return history.eventExists(username,channel,'follow');
-	}
-
-	function subExists(username,channel,ts) {
-		if(nodecg.bundleConfig.debug) {
-			return false;
-		}
-		return history.eventExists(username,channel,'sub', ts);
-	}
-
 	var onFollow = function(channel,username) {
-		if(!followExists(username,channel)) {
-			var content = {
-				name: username,
-				channel: channel,
-				ts: Date.now()
-			};
-			log('follow ' + username);
-			nodecg.sendMessage('follow', content);
-			history.add(username, channel, 'follow');
-		}
+		var content = {
+			name: username,
+			channel: channel,
+			ts: Date.now()
+		};
+		log('follow ' + username);
+		nodecg.sendMessage('follow', content);
 	};
 
 	var onSub = function(channel,username,ts) {
-		if(!subExists(username,channel,ts)) {
-			var content = {
-				name: username,
-				channel: channel,
-				ts: ts
-			};
-			log('Sub ' + username);
-			nodecg.sendMessage('subscription', content);
-			history.add(username, channel, 'sub', ts);
-		}
+		var content = {
+			name: username,
+			channel: channel,
+			ts: ts
+		};
+		log('Sub ' + username);
+		nodecg.sendMessage('subscription', content);
+
 	};
 
 	var onUpdate = function(channel,data) {
@@ -82,9 +62,11 @@ module.exports = function (extensionApi) {
 	}
 
 	function addChannels() {
+		var self = this;
 		nodecg.bundleConfig.channels.forEach(function(channel) {
 			if(channelCache[channel] === undefined) {
 				channelCache[channel] = new Channel(channel,nodecg,live);
+				live.addChannel(channelCache[channel]);
 			}
 		});
 	}
