@@ -1,6 +1,6 @@
 {
   "name": "nodecg-beam",
-  "version": "3.0.0",
+  "version": "3.0.1",
   "homepage": "http://probableprime.co.uk",
   "author": "Richard Fox",
   "description": "Hook into Beam Events and emit them to NodeCG channels",
