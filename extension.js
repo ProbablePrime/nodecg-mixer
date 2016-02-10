@@ -14,8 +14,7 @@ var client = new Beam();
 
 module.exports = function (extensionApi) {
 	nodecg = extensionApi;
-
-	if (!Object.keys(nodecg.bundleConfig).length) {
+	if(!nodecg.bundleConfig || !Object.keys(nodecg.bundleConfig).length) {
 		throw new Error('No config found in cfg/nodecg-beam.json, aborting!');
 	}
 
