@@ -5,10 +5,10 @@
     <title></title>
     <script src="components/webcomponentsjs/webcomponents-lite.min.js"></script>
     <link rel="stylesheet" href="components/paper-styles/paper-styles.html">
-    <link rel="import" href="components/iron-icons/iron-icons.html">
+    <link rel="stylesheet" href="components/paper-styles/paper-styles.html">
     <link rel="import" href="components/paper-icon-button/paper-icon-button.html">
     <link rel="import" href="components/paper-button/paper-button.html">
-    <link rel="import" href="components/paper-listbox/paper-listbox.html">
+    <link rel="import" href="components/iron-icons/iron-icons.html">
     <link rel="import" href="components/paper-item/paper-item.html">
     <link rel="stylesheet" href="panel.css">
     <script src="components/jquery/dist/jquery.min.js"></script>
@@ -19,20 +19,22 @@
 <body>
   <div style="display: flex;" class="beam-panel">
     <div class="column">
-      <h4 class="ncg-label">Debug Logs</h4>
+      <h4 class="">Debug Logs</h4>
       <div class="log"></div>
-      <paper-button raised>Clear Logs</paper-button>
+      <paper-button raised class="block nodecg-warning">Clear Logs</paper-button>
       <paper-button raised class="ctrl-test">TEST</paper-button>
     </div>
     <div class="column">
-      <h4 style="margin-top: 0;" class="ncg-label">Recent Subs</h4>
-      <paper-listbox id="sub_list" class="beam-list">
-      </paper-listbox>
-      <paper-button raised id="clearall_sub">Clear All</paper-button>
-      <h4 style="margin-top: 0;" class="ncg-label">Recent Follows</h4>
-      <paper-listbox id="follow_list" class="beam-list">
-      </paper-listbox>
-      <paper-button raised id="clearall_follow">Clear All</paper-button>
+      <h4 style="margin-top: 0;" class="">Recent Subs</h4>
+      <div id="sub_list" class="beam-list">
+      </div>
+
+      <paper-button raised id="clearall_sub" class="block nodecg-warning">Clear All</paper-button>
+      <hr />
+      <h4 style="margin-top: 0;" class="">Recent Follows</h4>
+      <div id="follow_list" class="beam-list">
+      </div>
+      <paper-button raised id="clearall_follow"  class="block nodecg-warning">Clear All</paper-button>
     </div>
   </div>
 <script>

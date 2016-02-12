@@ -1,25 +1,23 @@
+body {
+  min-height: 380px;
+}
+.column {
+  flex:1;
+}
 .nodecg-beam .sub {
   padding: 4px 35px 4px 6px;
   margin-bottom: 2px;
   overflow-wrap: break-word;
 }
-.beam-panel .column {
-  width: 100%;
-  margin: 0 4px;
-}
-.beam-panel .column:first-of-type {
-  margin-right: 4px;
+
+.column:first-of-type {
+  margin-right: 15px;
   margin-left: 0;
 }
-.beam-panel .column:last-of-type {
-  margin-right: 0;
-  margin-left: 4px;
-}
+
 .log {
   font-size: 12px;
-  width: 100%;
-  min-height: 51px;
-  max-height: 250px;
+  min-height: 296px;
   resize: none;
   border: 1px solid #a8a8a8;
   background-color: #f4f4f4;
@@ -31,18 +29,6 @@
 .log-message:nth-child(even) {
   background-color: #DDDDDD;
 }
-#nodecg-beam_list {
-  max-height: 250px;
-  overflow-y: scroll;
-  margin-bottom: 4px;
-}
-.fa-alert-button {
-  margin-top:-3px;
-  margin-right:10px;
-}
-.fa-alert-button span {
-  font-size:15px;
-}
 
 .fa-beam {
   background: url('/view/nodecg-beam/img/beam.png') no-repeat;
@@ -50,16 +36,14 @@
   height:20px;
 }
 
-.log {
-  width:300px;
-  height:200px;
-  overflow:auto;
-  background-color:#CCC;
-}
 
 .beam-list {
   margin-bottom: 4px;
   font-size:0.8em;
+  min-height: 100px;
+  max-height: 100px;
+  overflow-y: scroll;
+  margin-bottom: 4px;
 }
 
 .beam-list paper-icon {
@@ -71,3 +55,24 @@
   min-height:0px;
 }
 
+paper-button.block {
+  display: block;
+}
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-button {
+  width: 0px;
+  height:0px;
+}
+::-webkit-scrollbar-track {
+  background:transparent;
+  border:transparent;
+}
+::-webkit-scrollbar-thumb {
+  background:#C5C5C5;
+  border-radius:15px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background:#7d7d7d;
+}
