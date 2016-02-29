@@ -1,155 +1,133 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title></title>
-    <script src="components/webcomponentsjs/webcomponents-lite.min.js"></script>
-    <link rel="stylesheet" href="components/paper-styles/paper-styles.html">
-    <link rel="stylesheet" href="components/paper-styles/paper-styles.html">
-    <link rel="import" href="components/paper-icon-button/paper-icon-button.html">
-    <link rel="import" href="components/paper-button/paper-button.html">
-    <link rel="import" href="components/iron-icons/iron-icons.html">
-    <link rel="import" href="components/paper-item/paper-item.html">
-    <link rel="stylesheet" href="panel.css">
-    <script src="components/jquery/dist/jquery.min.js"></script>
+	<meta charset="UTF-8">
+	<title></title>
+	<script src="components/webcomponentsjs/webcomponents-lite.min.js"></script>
+	<link rel="stylesheet" href="components/paper-styles/paper-styles.html">
+	<link rel="import" href="components/boe-list/boe-list.html">
+	<link rel="import" href="components/paper-icon-button/paper-icon-button.html">
+	<link rel="import" href="components/paper-button/paper-button.html">
+	<link rel="import" href="components/iron-icons/iron-icons.html">
+	<link rel="import" href="components/paper-item/paper-item.html">
+	<link rel="stylesheet" href="panel.css">
+	<script src="components/jquery/dist/jquery.min.js"></script>
 
-    <style>
-    </style>
+	<style>
+	</style>
 </head>
 <body>
-  <div style="display: flex;" class="beam-panel">
-    <div class="column">
-      <h4 class="">Debug Logs</h4>
-      <div class="log"></div>
-      <paper-button raised class="block nodecg-warning">Clear Logs</paper-button>
-      <paper-button raised class="ctrl-test">TEST</paper-button>
-    </div>
-    <div class="column">
-      <h4 style="margin-top: 0;" class="">Recent Subs</h4>
-      <div id="sub_list" class="beam-list">
-      </div>
-
-      <paper-button raised id="clearall_sub" class="block nodecg-warning">Clear All</paper-button>
-      <hr />
-      <h4 style="margin-top: 0;" class="">Recent Follows</h4>
-      <div id="follow_list" class="beam-list">
-      </div>
-      <paper-button raised id="clearall_follow"  class="block nodecg-warning">Clear All</paper-button>
-    </div>
-  </div>
+	<div class="column">
+		<h4 style="margin-top: 0;" class="">Recent Subs</h4>
+		<boe-list empty-msg="No Recent Subscriptions" id="subscription_list">
+		</boe-list>
+		<paper-button raised id="clearall_sub" class="block nodecg-warning">Clear All</paper-button>
+	</div>
+	<div class="column">
+		<h4 style="margin-top: 0;" class="">Recent Follows</h4>
+		<boe-list empty-msg="No Recent Follows" id="follow_list">
+		</boe-list>
+		<paper-button raised id="clearall_follow" class="block nodecg-warning">Clear All</paper-button>
+	</div>
 <script>
+	function prepend(el, what) {
+		var child = el.querySelector('paper-item');
+		if (child) {
+			Polymer.dom(el).insertBefore(what, child);
+		} else {
+			Polymer.dom(el).appendChild(what);
+		}
+	}
+	function addSub(note) {
+		createAlertElem('subscription', note);
+	}
+	function addFollow(note) {
+		createAlertElem('follow', note);
+	}
 
-  (function ($) {
-    'use strict';
-    var $panel = $(document).find('.beam-panel');
-    var $reconnect = $panel.find('.ctrl-reconnect');
-    var $logs = $panel.find('.log');
-    var $clearLogs = $panel.find('.ctrl-clearLogs');
+	function createAlertElem(type, obj) {
+		//TODO: Remove jquery
+		var list = document.querySelector('#' + type + '_list');
+		if (obj.replay !== undefined && obj.replay) {
+			return;
+		}
+		var button =
+		'<paper-icon-button class="alert-control" data-command="hide" icon="close"></paper-icon-button>'+
+		'<paper-icon-button class="alert-control" data-command="resend" icon="autorenew"></paper-icon-button>';
+		var alertString =
+			'<paper-item>' +
+				'<paper-item-body>' +
+					'<strong>' + obj.name + '</strong>' +
+				'</paper-item-body>' +
+				button +
+			'</paper-item>';
+		var alert = $(alertString).get(0);
+		alert.dataset.username = obj.username;
+		alert.dataset.ts = obj.ts;
+		var alertControl = Array.prototype.slice.call(alert.querySelectorAll('.alert-control'));
+		alertControl.forEach(function (el) {
+			el.addEventListener('click', function (e) {
+				var target = e.currentTarget;
+				var alert = target.closest('paper-item');
+				var command = target.dataset.command;
+				var username = alert.dataset.username;
+				alert.dataset.replay = true;
+				console.log(command);
+				if (command === 'resend') {
+					nodecg.sendMessage(type, {name: username, username: username, replay: true});
+				}
+				if (command === 'hide') {
+					handleHide(list, type, alert);
+				}
+			});
+		});
 
-    var $test = $panel.find('.ctrl-test');
+		prepend(list, alert);
+	}
+	function capitalizeFirstLetter(string) {
+		return string.charAt(0).toUpperCase() + string.slice(1);
+	}
+	function handleHide(list, type, el) {
+		Polymer.dom(list).removeChild(el);
+		nodecg.sendMessage('dismiss' + capitalizeFirstLetter(type), el.dataset.username);
+	}
 
-    var MAX_LOG_LEN = 30;
+	document.querySelector('#clearall_sub').addEventListener('click', function () {
+		var list = document.querySelector('#subscription_list');
+		var items = Array.prototype.slice.call(list.querySelectorAll('paper-item'));
+		items.forEach(handleHide.bind(null, list, 'subscription'));
+	});
+	document.querySelector('#clearall_follow').addEventListener('click', function () {
+		var list = document.querySelector('#follow_list');
+		var items = Array.prototype.slice.call(list.querySelectorAll('paper-item'));
+		items.forEach(handleHide.bind(null, list, 'follow'));
+	});
 
-    nodecg.listenFor('subscription', addSub);
-    nodecg.listenFor('follow', addFollow);
+	nodecg.sendMessage('getFollows', '', function (err, follows) {
+		if (follows) {
+			follows.forEach(function (follow) {
+				addFollow({
+					username: follow.username,
+					name: follow.username,
+					ts: follow.ts
+				});
+			});
+		}
+	});
+	nodecg.sendMessage('getSubscriptions', '', function (err, subscriptions) {
+		if (subscriptions) {
+			subscriptions.forEach(function (subscription) {
+				addSub({
+					username: subscription.username,
+					name: subscription.username,
+					ts: subscription.ts
+				});
+			});
+		}
+	});
 
-    nodecg.listenFor('log', function(msg) {
-        $logs.append('<div class="log-message">' + msg + '</div>');
-
-        var $children = $logs.children();
-        var len = $children.length;
-        if (len > MAX_LOG_LEN) {
-            var $toDelete = $children.slice(0, len - MAX_LOG_LEN);
-            $toDelete.remove();
-        }
-
-        $logs.animate({ scrollTop: $logs[0].scrollHeight}, 1000);
-    });
-
-    var button =
-        '<paper-icon-button class="alert-control" data-command="hide" icon="close"></paper-icon-button>'+
-        '<paper-icon-button class="alert-control" data-command="resend" icon="autorenew"></paper-icon-button>';
-
-    function addSub(note) {
-        if(note.replay !== undefined && note.replay) {
-            return;
-        }
-        var alert =
-            '<paper-item class="sub">' +
-                '<paper-item-body>'+
-                    '<strong>' + note.name +'</strong>' + (note.resub ? ' - Resub ×' + note.months : '') +
-                '</paper-item-body>' +
-                button +
-            '</paper-item>';
-        var $alert  = $(alert);
-        $alert.data('note',note);
-        $alert.find(".alert-control").on("click", function(e){
-            var target = $(e.currentTarget);
-            var alert = target.closest('paper-item');
-            var command = target.data('command');
-            var note = alert.data('note');
-            note.replay = true;
-            if(command == 'resend') {
-                nodecg.sendMessage('subscription', note)
-            }
-            if(command == 'hide') {
-                alert.remove();
-            }
-        })
-        $('#sub_list').prepend($alert);
-    }
-    function addFollow(note) {
-        if(note.replay !== undefined && note.replay) {
-            return;
-        }
-        var alert =
-            '<paper-item class="follow">' +
-                '<paper-item-body>'+
-                    '<strong>' + note.name +'</strong>' + (note.resub ? ' - Resub ×' + note.months : '') +
-                '</paper-item-body>' +
-                button +
-            '</paper-item>';
-        var $alert  = $(alert);
-        $alert.data('note',note);
-        $alert.find(".alert-control").on("click", function(e){
-            var target = $(e.currentTarget);
-            var alert = target.closest('paper-item');
-            var command = target.data('command');
-            var note = alert.data('note');
-            note.replay = true;
-            if(command == 'resend') {
-                nodecg.sendMessage('follow', note)
-            }
-            if(command == 'hide') {
-                alert.remove();
-            }
-        })
-        $('#follow_list').prepend($alert);
-    }
-
-    $('#clearall_sub').click(function() {
-        $('#sub_list').find('paper-item').remove();
-    });
-    $('#clearall_follow').click(function() {
-        $('#follow_list').find('paper-item').remove();
-    });
-
-    $clearLogs.click(function() {
-       $logs.children().remove();
-    });
-
-
-    $test.on("click",function(){
-        addFollow({
-            name:'Test'+Date.now(),
-            ts: Date.now()
-        });
-        addSub({
-            name:'Test'+Date.now(),
-            ts: Date.now()
-        });
-    });
-  }(jQuery));
+	nodecg.listenFor('subscription', addSub);
+	nodecg.listenFor('follow', addFollow);
 </script>
 </body>
 </html>

@@ -1,13 +1,8 @@
 body {
-  min-height: 380px;
+  display: flex;
 }
 .column {
   flex:1;
-}
-.nodecg-beam .sub {
-  padding: 4px 35px 4px 6px;
-  margin-bottom: 2px;
-  overflow-wrap: break-word;
 }
 
 .column:first-of-type {
@@ -15,49 +10,43 @@ body {
   margin-left: 0;
 }
 
-.log {
-  font-size: 12px;
-  min-height: 296px;
-  resize: none;
-  border: 1px solid #a8a8a8;
-  background-color: #f4f4f4;
-  overflow-y: scroll;
-  margin-bottom: 8px;
-  padding:2px;
-}
-
 .log-message:nth-child(even) {
   background-color: #DDDDDD;
 }
 
-.fa-beam {
-  background: url('/view/nodecg-beam/img/beam.png') no-repeat;
-  background-size: 20px 20px;
-  height:20px;
+paper-item {
+  padding:0px;
 }
-
-
-.beam-list {
+paper-item-body {
+  flex:2;
+}
+boe-list {
   margin-bottom: 4px;
   font-size:0.8em;
-  min-height: 100px;
-  max-height: 100px;
-  overflow-y: scroll;
-  margin-bottom: 4px;
+  overflow: scroll;
 }
 
-.beam-list paper-icon {
+boe-list paper-icon {
   width:35px;
   height:35px;
 }
 
-.beam-list paper-item {
+boe-list paper-item {
   min-height:0px;
+}
+
+boe-list paper-item-body {
+  display: flex;
+}
+
+boe-list paper-item-body span:first-of-type {
+  flex:1;
 }
 
 paper-button.block {
   display: block;
 }
+
 ::-webkit-scrollbar {
   width: 8px;
 }
@@ -76,3 +65,9 @@ paper-button.block {
 ::-webkit-scrollbar-thumb:hover {
   background:#7d7d7d;
 }
+
+
+
+
+
+
