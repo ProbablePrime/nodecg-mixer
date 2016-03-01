@@ -5,6 +5,8 @@ var Channel = require('./lib/Channel.js');
 var LiveLoading = require('./lib/Live.js');
 var channelCache = {};
 
+var toArray = require('object-values-to-array');
+
 var live;
 
 module.exports = function (extensionApi) {
@@ -59,11 +61,6 @@ module.exports = function (extensionApi) {
 				channel.on('follow', onFollow.bind(self, channelName));
 				channel.on('sub', onSub.bind(self, channelName));
 				channel.on('update', onUpdate.bind(self, channelName));
-				// setTimeout(function() {
-				// 	setInterval(function() {
-				// 		channel.onUpdate('channel:000:resubscribed', {user:{username:'Bamb'}});
-				// 	},1000);
-				// },3000);
 				channelCache[channelName] = channel;
 			}
 		});
@@ -71,31 +68,38 @@ module.exports = function (extensionApi) {
 
 	createLive();
 	addChannels();
-	//Static'ed to prim atm
-	var channel = 'ProbablePrime';
-	nodecg.listenFor('getFollows', function (value, cb) {
-		if (typeof cb === 'function') {
-			channelCache[channel].findUnDismissedFollows().then(function (follows) {
-				cb(null, follows);
-			}).catch(function (err) {
-				cb(err, null);
-			});
+
+	function eachChannel(func) {
+		return toArray(channelCache).map(func);
+	}
+
+	function getUnDismissed(type, cb) {
+		if (typeof cb !== 'function') {
+			return;
 		}
+		var func = 'findUnDismissedFollows';
+		if (type === 'subscriptions') {
+			func = 'findUnDismissedSubscriptions';
+		}
+		var promises = eachChannel((channel) => channel[func]());
+		Promise.all(promises).then((result) => {
+			var combinedArray = result.reduce((previous, next) => previous.concat(next), []);
+			cb(null, combinedArray);
+		}).catch((err) => cb(err, []));
+	}
+
+	// Static'ed to prim atm
+	nodecg.listenFor('getFollows', function (value, cb) {
+		getUnDismissed('follows', cb);
 	});
 	nodecg.listenFor('getSubscriptions', function (value, cb) {
-		if (typeof cb === 'function') {
-			channelCache[channel].findUnDismissedSubscriptions().then(function (subscriptions) {
-				cb(null, subscriptions);
-			}).catch(function (err) {
-				cb(err, null);
-			});
-		}
+		getUnDismissed('subscriptions', cb);
 	});
 
 	nodecg.listenFor('dismissFollow', function (value) {
-		channelCache[channel].dismissFollow(value);
+		eachChannel((channel) => channel.dismissFollow(value));
 	});
 	nodecg.listenFor('dismissSubscription', function (value) {
-		channelCache[channel].dismissSubscription(value);
+		eachChannel((channel) => channel.dismissSubscription(value));
 	});
 };

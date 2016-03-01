@@ -10,6 +10,7 @@
     "bluebird": "^3.3.3",
     "nedb": "^1.8.0",
     "node-localstorage": "^1.0.0",
+    "object-values-to-array": "^1.0.0",
     "wsabi-client-bacon": "^0.1.4"
   },
   "nodecg": {
@@ -17,7 +18,7 @@
     "dashboardPanels": [
       {
         "name": "beam",
-        "title": "Beam.pro Events",
+        "title": "Beam",
         "width": 4,
         "headerColor": "#262262",
         "file": "panel.html"
