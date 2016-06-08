@@ -1,6 +1,6 @@
 {
   "name": "nodecg-beam",
-  "version": "4.0.0",
+  "version": "4.0.1",
   "homepage": "http://probableprime.co.uk",
   "author": "Richard Fox",
   "description": "Hook into Beam Events and emit them to NodeCG channels",
@@ -11,7 +11,7 @@
     "nedb": "^1.8.0",
     "node-localstorage": "^1.0.0",
     "object-values-to-array": "^1.0.0",
-    "wsabi-client-bacon": "^0.1.4"
+    "wsabi-client-bacon": "^0.2.1"
   },
   "nodecg": {
     "compatibleRange": "~0.7.0",
