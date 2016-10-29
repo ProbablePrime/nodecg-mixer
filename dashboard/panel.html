@@ -145,6 +145,7 @@
 	});
 
 	function onUpdate(channel, data) {
+		//TODO Polymer this better
 		if (data.numFollowers) {
 			document.querySelector('.followers').innerHTML = data.numFollowers;
 		}

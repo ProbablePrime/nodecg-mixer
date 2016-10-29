@@ -1,16 +1,13 @@
 'use strict';
+const Channel = require('./lib/Channel.js');
+const LiveLoading = require('./lib/Live.js');
+const channelCache = {};
 
-var nodecg;
-var Channel = require('./lib/Channel.js');
-var LiveLoading = require('./lib/Live.js');
-var channelCache = {};
-
-var toArray = require('object-values-to-array');
-
-var live;
+const toArray = require('object-values-to-array');
 
 module.exports = function (extensionApi) {
-	nodecg = extensionApi;
+	const nodecg = extensionApi;
+	const live = new LiveLoading(nodecg);
 	if (!nodecg.bundleConfig || !Object.keys(nodecg.bundleConfig).length) {
 		throw new Error('No config found in cfg/nodecg-beam.json, aborting!');
 	}
@@ -24,17 +21,16 @@ module.exports = function (extensionApi) {
 		nodecg.sendMessage('log', msg);
 	}
 
-	var onFollow = function (channelName, username) {
-		var content = {
+	function onFollow(channelName, username) {
+		log(`Follow: ${username}`);
+		nodecg.sendMessage('follow', {
 			name: username,
 			channel: channelName,
 			ts: Date.now()
-		};
-		log(`Follow: ${username}`);
-		nodecg.sendMessage('follow', content);
+		});
 	};
 
-	var onSub = function (channelName, username, ts) {
+	function onSub(channelName, username, ts) {
 		var content = {
 			name: username,
 			channel: channelName,
@@ -44,13 +40,18 @@ module.exports = function (extensionApi) {
 		nodecg.sendMessage('subscription', content);
 	};
 
-	var onUpdate = function (channel, data) {
+	function onHost(channelName, hoster, ts) {
+		log(`Host: ${hoster}`);
+		nodecg.sendMessage('host', {
+			name: username,
+			channel: channelName,
+			ts: ts
+		});
+	}
+
+	function onUpdate(channel, data) {
 		nodecg.sendMessage('update', channel, data);
 	};
-
-	function createLive() {
-		live = new LiveLoading(nodecg);
-	}
 
 	function addChannels() {
 		var self = this;
@@ -60,13 +61,11 @@ module.exports = function (extensionApi) {
 				channel.on('follow', onFollow.bind(self, channelName));
 				channel.on('sub', onSub.bind(self, channelName));
 				channel.on('update', onUpdate.bind(self, channelName));
+				channel.on('host', onHost.bind(self, channelName));
 				channelCache[channelName] = channel;
 			}
 		});
 	}
-
-	createLive();
-	addChannels();
 
 	function eachChannel(func) {
 		return toArray(channelCache).map(func);
@@ -104,4 +103,6 @@ module.exports = function (extensionApi) {
 	nodecg.listenFor('dismissSubscription', function (value) {
 		eachChannel((channel) => channel.dismissSubscription(value));
 	});
+
+	addChannels();
 };
