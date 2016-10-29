@@ -45,8 +45,7 @@ module.exports = function (extensionApi) {
 	};
 
 	var onUpdate = function (channel, data) {
-		this.emit('update', channel, data);
-		this.nodecg.sendMessage('update', channel, data);
+		nodecg.sendMessage('update', channel, data);
 	};
 
 	function createLive() {
@@ -91,6 +90,10 @@ module.exports = function (extensionApi) {
 	nodecg.listenFor('getFollows', function (value, cb) {
 		getUnDismissed('follows', cb);
 	});
+	nodecg.listenFor('getChannelData', function(value, cb) {
+		cb(null, channelCache[value].data);
+	});
+
 	nodecg.listenFor('getSubscriptions', function (value, cb) {
 		getUnDismissed('subscriptions', cb);
 	});

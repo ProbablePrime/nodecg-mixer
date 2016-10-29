@@ -21,10 +21,10 @@
 <body>
 	<div class="stats-container">
 		<div class="stat">
-			<iron-icon icon="image:remove-red-eye"></iron-icon><span class="viewers">44</span>
+			<iron-icon icon="image:remove-red-eye"></iron-icon><span class="viewers">00</span>
 		</div>
 		<div class="stat">
-			<iron-icon icon="social:people"></iron-icon> <span class="followers">20</span>
+			<iron-icon icon="social:people"></iron-icon> <span class="followers">00</span>
 		</div>
 	</div>
 	<div class="list-container">
@@ -116,6 +116,11 @@
 		items.forEach(handleHide.bind(null, list, 'follow'));
 	});
 
+	nodecg.sendMessage('getChannelData','ProbablePrime', function(err, result) {
+		console.log(result);
+		onUpdate(result,result);
+	})
+
 	nodecg.sendMessage('getFollows', '', function (err, follows) {
 		if (follows) {
 			follows.forEach(function (follow) {
@@ -139,8 +144,18 @@
 		}
 	});
 
+	function onUpdate(channel, data) {
+		if (data.numFollowers) {
+			document.querySelector('.followers').innerHTML = data.numFollowers;
+		}
+		if (data.viewersCurrent) {
+			document.querySelector('.viewers').innerHTML = data.viewersCurrent;
+		}
+	}
+
 	nodecg.listenFor('subscription', addSub);
 	nodecg.listenFor('follow', addFollow);
+	nodecg.listenFor('update', onUpdate);
 </script>
 </body>
 </html>

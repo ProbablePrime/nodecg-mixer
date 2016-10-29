@@ -9,6 +9,7 @@
     "beam-client-node": "^0.1.2",
     "bluebird": "^3.3.3",
     "carina": "^0.5.3",
+    "lodash": "^4.16.4",
     "nedb": "^1.8.0",
     "node-fetch": "^1.6.3",
     "node-localstorage": "^1.0.0",
