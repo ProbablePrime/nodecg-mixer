@@ -8,13 +8,15 @@
   "dependencies": {
     "beam-client-node": "^0.1.2",
     "bluebird": "^3.3.3",
+    "carina": "^0.5.3",
     "nedb": "^1.8.0",
+    "node-fetch": "^1.6.3",
     "node-localstorage": "^1.0.0",
     "object-values-to-array": "^1.0.0",
     "wsabi-client-bacon": "^0.2.1"
   },
   "nodecg": {
-    "compatibleRange": "~0.7.0",
+    "compatibleRange": "~0.8.0",
     "dashboardPanels": [
       {
         "name": "beam",

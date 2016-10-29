@@ -30,7 +30,7 @@ module.exports = function (extensionApi) {
 			channel: channelName,
 			ts: Date.now()
 		};
-		log('follow ' + username);
+		log(`Follow: ${username}`);
 		nodecg.sendMessage('follow', content);
 	};
 
@@ -40,7 +40,7 @@ module.exports = function (extensionApi) {
 			channel: channelName,
 			ts: ts
 		};
-		log('Sub ' + username);
+		log(`Sub: ${username}`);
 		nodecg.sendMessage('subscription', content);
 	};
 
@@ -55,7 +55,7 @@ module.exports = function (extensionApi) {
 
 	function addChannels() {
 		var self = this;
-		nodecg.bundleConfig.channels.forEach(function (channelName) {
+		nodecg.bundleConfig.channels.forEach(channelName => {
 			if (channelCache[channelName] === undefined) {
 				var channel = new Channel(channelName, nodecg, live);
 				channel.on('follow', onFollow.bind(self, channelName));
@@ -81,14 +81,13 @@ module.exports = function (extensionApi) {
 		if (type === 'subscriptions') {
 			func = 'findUnDismissedSubscriptions';
 		}
-		var promises = eachChannel((channel) => channel[func]());
-		Promise.all(promises).then((result) => {
+		var promises = eachChannel(channel => channel[func]());
+		Promise.all(promises).then(result => {
 			var combinedArray = result.reduce((previous, next) => previous.concat(next), []);
 			cb(null, combinedArray);
-		}).catch((err) => cb(err, []));
+		}).catch(err => cb(err, []));
 	}
 
-	// Static'ed to prim atm
 	nodecg.listenFor('getFollows', function (value, cb) {
 		getUnDismissed('follows', cb);
 	});

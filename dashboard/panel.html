@@ -9,6 +9,8 @@
 	<link rel="import" href="components/paper-icon-button/paper-icon-button.html">
 	<link rel="import" href="components/paper-button/paper-button.html">
 	<link rel="import" href="components/iron-icons/iron-icons.html">
+	<link rel="import" href="components/iron-icons/social-icons.html">
+	<link rel="import" href="components/iron-icons/image-icons.html">
 	<link rel="import" href="components/paper-item/paper-item.html">
 	<link rel="stylesheet" href="panel.css">
 	<script src="components/jquery/dist/jquery.min.js"></script>
@@ -17,17 +19,27 @@
 	</style>
 </head>
 <body>
-	<div class="column">
-		<h4 style="margin-top: 0;" class="">Recent Subs</h4>
-		<boe-list empty-msg="No Recent Subscriptions" id="subscription_list">
-		</boe-list>
-		<paper-button raised id="clearall_sub" class="block nodecg-warning">Clear All</paper-button>
+	<div class="stats-container">
+		<div class="stat">
+			<iron-icon icon="image:remove-red-eye"></iron-icon><span class="viewers">44</span>
+		</div>
+		<div class="stat">
+			<iron-icon icon="social:people"></iron-icon> <span class="followers">20</span>
+		</div>
 	</div>
-	<div class="column">
-		<h4 style="margin-top: 0;" class="">Recent Follows</h4>
-		<boe-list empty-msg="No Recent Follows" id="follow_list">
-		</boe-list>
-		<paper-button raised id="clearall_follow" class="block nodecg-warning">Clear All</paper-button>
+	<div class="list-container">
+		<div class="column">
+			<h4 style="margin-top: 0;" class="">Recent Subs</h4>
+			<boe-list empty-msg="No Recent Subscriptions" id="subscription_list">
+			</boe-list>
+			<paper-button raised id="clearall_sub" class="block nodecg-warning">Clear All</paper-button>
+		</div>
+		<div class="column">
+			<h4 style="margin-top: 0;" class="">Recent Follows</h4>
+			<boe-list empty-msg="No Recent Follows" id="follow_list">
+			</boe-list>
+			<paper-button raised id="clearall_follow" class="block nodecg-warning">Clear All</paper-button>
+		</div>
 	</div>
 <script>
 	function prepend(el, what) {
@@ -69,6 +81,7 @@
 			el.addEventListener('click', function (e) {
 				var target = e.currentTarget;
 				var alert = target.closest('paper-item');
+				console.log(target.dataset);
 				var command = target.dataset.command;
 				var username = alert.dataset.username;
 				alert.dataset.replay = true;

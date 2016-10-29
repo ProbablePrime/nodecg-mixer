@@ -1,8 +1,21 @@
-body {
+.list-container {
   display: flex;
 }
 .column {
   flex:1;
+}
+
+.stats-container {
+  display: flex;
+}
+
+.stat {
+  padding: 5px;
+  flex:0.15;
+}
+
+.stat iron-icon {
+  padding-right:5px;
 }
 
 .column:first-of-type {
