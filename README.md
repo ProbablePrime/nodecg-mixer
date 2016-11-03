@@ -1,7 +1,7 @@
 # nodecg-beam
 Hook into Beam Events and emit them to NodeCG Compatible channels.
 
-This is a [NodeCG](http://github.com/nodecg/nodecg) 0.7 bundle.
+This is a [NodeCG](http://github.com/nodecg/nodecg) 0.8 bundle.
 
 # TODO
 
@@ -9,6 +9,7 @@ This is a [NodeCG](http://github.com/nodecg/nodecg) 0.7 bundle.
 - [X] Follow
 - [X] Sub -Thanks so much NonGenericName
 - [X] Misc Update Events
+- [X] Hosting
 - [ ] Status
 - [ ] Polls
 
