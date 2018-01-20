@@ -18,7 +18,6 @@
 			}
 		},
 		changed(item) {
-			console.log(this)
 			Object.assign(this, item);
 		},
 		dismiss() {

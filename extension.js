@@ -5,6 +5,10 @@ const channelCache = {};
 
 const toArray = require('object-values-to-array');
 
+const SUBSCRIPTION = 'subscription';
+const FOLLOW = 'follow';
+const HOST = 'host';
+
 module.exports = function (extensionApi) {
 	const nodecg = extensionApi;
 	const live = new LiveLoading(nodecg);
@@ -23,8 +27,9 @@ module.exports = function (extensionApi) {
 
 	function onFollow(channelName, username) {
 		log(`Follow: ${username}`);
-		nodecg.sendMessage('follow', {
-			name: username,
+		nodecg.sendMessage(FOLLOW, {
+			username,
+			type: FOLLOW,
 			channel: channelName,
 			ts: Date.now()
 		});
@@ -32,18 +37,20 @@ module.exports = function (extensionApi) {
 
 	function onSub(channelName, username, ts) {
 		var content = {
-			name: username,
+			username,
+			type: SUBSCRIPTION,
 			channel: channelName,
 			ts: ts
 		};
 		log(`Sub: ${username}`);
-		nodecg.sendMessage('subscription', content);
+		nodecg.sendMessage(SUBSCRIPTION, content);
 	};
 
 	function onHost(channelName, hoster, ts) {
 		log(`Host: ${hoster}`);
-		nodecg.sendMessage('host', {
-			name: username,
+		nodecg.sendMessage(HOST, {
+			username,
+			type: HOST,
 			channel: channelName,
 			ts: ts
 		});
@@ -58,10 +65,10 @@ module.exports = function (extensionApi) {
 		nodecg.bundleConfig.channels.forEach(channelName => {
 			if (channelCache[channelName] === undefined) {
 				var channel = new Channel(channelName, nodecg, live);
-				channel.on('follow', onFollow.bind(self, channelName));
-				channel.on('sub', onSub.bind(self, channelName));
+				channel.on(FOLLOW, onFollow.bind(self, channelName));
+				channel.on(SUBSCRIPTION, onSub.bind(self, channelName));
 				channel.on('update', onUpdate.bind(self, channelName));
-				channel.on('host', onHost.bind(self, channelName));
+				channel.on(HOST, onHost.bind(self, channelName));
 				channelCache[channelName] = channel;
 			}
 		});
@@ -76,25 +83,37 @@ module.exports = function (extensionApi) {
 			return;
 		}
 		var func = 'findUnDismissedFollows';
-		if (type === 'subscriptions') {
+		if (type === SUBSCRIPTION) {
 			func = 'findUnDismissedSubscriptions';
 		}
-		var promises = eachChannel(channel => channel[func]());
+		const promises = eachChannel(channel => channel[func]());
 		Promise.all(promises).then(result => {
-			var combinedArray = result.reduce((previous, next) => previous.concat(next), []);
+			const combinedArray = result
+				.reduce((previous, next) => previous.concat(next), [])
+				.map(item => {
+					return {
+						username: item.username,
+						type,
+						ts: item[type].ts ? item[type].ts : 0,
+						channel: 0,
+					};
+				});
 			cb(null, combinedArray);
-		}).catch(err => cb(err, []));
+		}).catch(err => {
+			this.nodecg.log.error(err);
+			cb(err, [])
+		});
 	}
 
 	nodecg.listenFor('getFollows', function (value, cb) {
-		getUnDismissed('follows', cb);
+		getUnDismissed(FOLLOW, cb);
 	});
 	nodecg.listenFor('getChannelData', function(value, cb) {
 		cb(null, channelCache[value].data);
 	});
 
 	nodecg.listenFor('getSubscriptions', function (value, cb) {
-		getUnDismissed('subscriptions', cb);
+		getUnDismissed(SUBSCRIPTION, cb);
 	});
 
 	nodecg.listenFor('dismissFollow', function (value) {

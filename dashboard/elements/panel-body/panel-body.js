@@ -20,6 +20,7 @@
 			})
 
 			nodecg.sendMessage('getFollows', '', (err, f) => {
+				console.log(f);
 				if (f) {
 					this.set('followers', f);
 				}
@@ -42,6 +43,7 @@
 
 		},
 		itemDismissed(item) {
+			console.log('dismiss');
 			nodecg.sendMessage('dismiss', item);
 			this.removeItem(item);
 		},
