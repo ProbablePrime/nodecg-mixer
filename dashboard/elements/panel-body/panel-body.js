@@ -15,12 +15,10 @@
 		},
 		ready() {
 			nodecg.sendMessage('getChannelData','ProbablePrime', (err, result) => {
-				console.log(result);
 				this.onUpdate(result,result);
 			})
 
 			nodecg.sendMessage('getFollows', '', (err, f) => {
-				console.log(f);
 				if (f) {
 					this.set('followers', f);
 				}
@@ -34,17 +32,23 @@
 			nodecg.listenFor('follow', this.addFollow);
 			nodecg.listenFor('update', this.onUpdate);
 		},
-		addSub() {
+		addSub(item) {
+			if (item.type !== 'subscription' || item.replay) {
+				return;
+			}
+			this.push('subscriptions', item);
 		},
-		addFollow() {
-
+		addFollow(item) {
+			if (item.type !== 'follow' || item.replay) {
+				return;
+			}
+			this.push('follows', item);
 		},
 		onUpdate() {
 
 		},
 		itemDismissed(e) {
 			const item = e.detail.item;
-			console.log('dismiss', item);
 			nodecg.sendMessage('dismiss', item);
 			this.removeItem(item);
 		},

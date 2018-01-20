@@ -8,10 +8,6 @@
 		is: 'list-event',
 
 		properties: {
-			type: {
-				type: String,
-				reflectToAttribute: true
-			},
 			item: {
 				type: Object,
 				observer: 'changed'
@@ -24,7 +20,8 @@
 			this.fire(`dismiss`, this);
 		},
 		resend() {
-			nodecg.sendMessage(this.type, Object.assign({}, this, { replay: true }));
+			console.log('resend');
+			nodecg.sendMessage(this.item.type, Object.assign({}, this.item, { replay: true }));
 		}
 	});
 })();

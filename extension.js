@@ -119,7 +119,6 @@ module.exports = function (extensionApi) {
 	});
 
 	nodecg.listenFor('dismiss', function (value) {
-		console.log('dismiss', value);
 		if(value.type === FOLLOW) {
 			eachChannel((channel) => channel.dismissFollow(value.username));
 		} else {

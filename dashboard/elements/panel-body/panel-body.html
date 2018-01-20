@@ -58,18 +58,6 @@
 			height:35px;
 		}
 
-		boe-list paper-item {
-			min-height:0px;
-		}
-
-		boe-list paper-item-body {
-			display: flex;
-		}
-
-		boe-list paper-item-body span:first-of-type {
-			flex:1;
-		}
-
 		paper-button.block {
 			display: block;
 		}
@@ -107,7 +95,7 @@
 				<h4 style="margin-top: 0;" class="">Recent Subs</h4>
 				<boe-list empty-msg="No Recent Subscriptions" id="subscription_list">
 					<template is="dom-repeat" items="[[subscriptions]]">
-						<list-event type="subscription" item="[[item]]" on-dismiss="itemDismissed"></list-event>
+						<list-event item="[[item]]" on-dismiss="itemDismissed"></list-event>
 					</template>
 				</boe-list>
 				<paper-button raised id="clearall_sub" class="block nodecg-warning">Clear All</paper-button>
@@ -116,7 +104,7 @@
 				<h4 style="margin-top: 0;" class="">Recent Follows</h4>
 				<boe-list empty-msg="No Recent Follows" id="follow_list">
 					<template is="dom-repeat" items="[[followers]]">
-						<list-event type="follow" item="[[item]]" on-dismiss="itemDismissed"></list-event>
+						<list-event item="[[item]]" on-dismiss="itemDismissed"></list-event>
 					</template>
 				</boe-list>
 				<paper-button raised id="clearall_follow" class="block nodecg-warning">Clear All</paper-button>
