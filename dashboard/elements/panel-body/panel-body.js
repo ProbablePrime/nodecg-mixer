@@ -20,18 +20,13 @@
 			})
 
 			nodecg.sendMessage('getFollows', '', (err, f) => {
-				console.log(f);
 				if (f) {
-					f.forEach(fw => {
-						this.push('followers', fw);
-					})
+					this.set('followers', f);
 				}
 			});
 			nodecg.sendMessage('getSubscriptions', '', (err, subs) => {
 				if (subs) {
-					subs.forEach(sub => {
-						this.push('subscriptions', sub);
-					})
+					this.set('subscriptions', subs);
 				}
 			});
 			nodecg.listenFor('subscription', this.addSub);
