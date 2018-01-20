@@ -116,11 +116,13 @@ module.exports = function (extensionApi) {
 		getUnDismissed(SUBSCRIPTION, cb);
 	});
 
-	nodecg.listenFor('dismissFollow', function (value) {
-		eachChannel((channel) => channel.dismissFollow(value));
-	});
-	nodecg.listenFor('dismissSubscription', function (value) {
-		eachChannel((channel) => channel.dismissSubscription(value));
+	nodecg.listenFor('dismiss', function (value) {
+		console.log('dismiss', value);
+		if(value.type === FOLLOW) {
+			eachChannel((channel) => channel.dismissFollow(value.username));
+		} else {
+			eachChannel((channel) => channel.dismissSubscription(value.username));
+		}
 	});
 
 	addChannels();

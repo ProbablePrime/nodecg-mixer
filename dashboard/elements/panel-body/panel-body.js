@@ -42,21 +42,18 @@
 		onUpdate() {
 
 		},
-		itemDismissed(item) {
-			console.log('dismiss');
+		itemDismissed(e) {
+			const item = e.detail.item;
+			console.log('dismiss', item);
 			nodecg.sendMessage('dismiss', item);
 			this.removeItem(item);
 		},
 		removeItem(item) {
 			if (item.type === 'follow') {
-				this.followers = this.followers.filter(follow => {
-					return follow.username !== item.username;
-				});
+				this.arrayDelete('followers', item);
 			}
 			if (item.type === 'subscription') {
-				this.subscriptions.filter(subscription => {
-					return subscription.username !== item.username;
-				});
+				this.arrayDelete('subscriptions', item);
 			}
 		}
 	});
