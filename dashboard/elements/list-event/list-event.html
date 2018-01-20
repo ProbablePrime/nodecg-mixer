@@ -1,0 +1,17 @@
+<link rel="import" href="../../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../../bower_components/paper-item/paper-item.html">
+<link rel="import" href="../../../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../../../bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="../../../bower_components/paper-styles/shadow.html">
+<dom-module id="list-event">
+	<template>
+		<paper-item>
+			<paper-item-body>
+				<strong>[[username]]</strong>
+			</paper-item-body>
+			<paper-icon-button class="alert-control" on-click="dismiss" title="Dismiss" icon="close"></paper-icon-button>
+			<paper-icon-button class="alert-control" on-click="resend" title="Resend" icon="autorenew"></paper-icon-button>
+		</paper-item>
+	</template>
+	<script src="list-event.js"></script>
+</dom-module>

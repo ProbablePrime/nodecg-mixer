@@ -103,9 +103,7 @@
 
 		prepend(list, alert);
 	}
-	function capitalizeFirstLetter(string) {
-		return string.charAt(0).toUpperCase() + string.slice(1);
-	}
+
 	function handleHide(list, type, el) {
 		Polymer.dom(list).removeChild(el);
 		nodecg.sendMessage('dismiss' + capitalizeFirstLetter(type), el.dataset.username);
@@ -122,33 +120,7 @@
 		items.forEach(handleHide.bind(null, list, 'follow'));
 	});
 
-	nodecg.sendMessage('getChannelData','ProbablePrime', function(err, result) {
-		console.log(result);
-		onUpdate(result,result);
-	})
 
-	nodecg.sendMessage('getFollows', '', function (err, follows) {
-		if (follows) {
-			follows.forEach(function (follow) {
-				addFollow({
-					username: follow.username,
-					name: follow.username,
-					ts: follow.ts
-				});
-			});
-		}
-	});
-	nodecg.sendMessage('getSubscriptions', '', function (err, subscriptions) {
-		if (subscriptions) {
-			subscriptions.forEach(function (subscription) {
-				addSub({
-					username: subscription.username,
-					name: subscription.username,
-					ts: subscription.ts
-				});
-			});
-		}
-	});
 
 	function onUpdate(channel, data) {
 		//TODO Polymer this better

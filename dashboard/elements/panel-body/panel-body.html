@@ -1,15 +1,14 @@
+<link rel="import" href="../../../bower_components/polymer/polymer.html">
+<link rel="stylesheet" href="../../../bower_components/paper-styles/paper-styles.html">
+<link rel="import" href="../../../bower_components/boe-list/boe-list.html">
+<link rel="import" href="../../../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../../../bower_components/iron-flex-layout/iron-flex-layout.html">
+<link rel="import" href="../../../bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="../../../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../../../bower_components/iron-icons/social-icons.html">
+<link rel="import" href="../../../bower_components/iron-icons/image-icons.html">
 
-<script src="../bower_components/webcomponentsjs/webcomponents-lite.min.js"></script>
-<link rel="stylesheet" href="../bower_components/paper-styles/paper-styles.html">
-<link rel="import" href="../bower_components/boe-list/boe-list.html">
-<link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
-<link rel="import" href="../bower_components/paper-button/paper-button.html">
-<link rel="import" href="../bower_components/iron-icons/iron-icons.html">
-<link rel="import" href="../bower_components/iron-icons/social-icons.html">
-<link rel="import" href="../bower_components/iron-icons/image-icons.html">
-<link rel="import" href="../bower_components/paper-item/paper-item.html">
-<link rel="stylesheet" href="panel.css">
-<script src="../bower_components/jquery/dist/jquery.min.js"></script>
+<link rel="import" href="../list-event/list-event.html">
 
 <dom-module id="panel-body">
 	<style>
@@ -107,8 +106,8 @@
 			<div class="column">
 				<h4 style="margin-top: 0;" class="">Recent Subs</h4>
 				<boe-list empty-msg="No Recent Subscriptions" id="subscription_list">
-					<template is="dom-repeat" items="[[subscribers]]" sort="newestFirst" as="item">
-						<list-event item="[[item]]"></list-event>
+					<template is="dom-repeat" items="[[subscriptions]]">
+						<list-event type="subscription" item="[[item]]" on-dismiss="itemDismissed"></list-event>
 					</template>
 				</boe-list>
 				<paper-button raised id="clearall_sub" class="block nodecg-warning">Clear All</paper-button>
@@ -116,8 +115,8 @@
 			<div class="column">
 				<h4 style="margin-top: 0;" class="">Recent Follows</h4>
 				<boe-list empty-msg="No Recent Follows" id="follow_list">
-					<template is="dom-repeat" items="[[followers]]" sort="newestFirst" as="item">
-						<list-event item="[[item]]"></list-event>
+					<template is="dom-repeat" items="[[followers]]">
+						<list-event type="follow" item="[[item]]" on-dismiss="itemDismissed"></list-event>
 					</template>
 				</boe-list>
 				<paper-button raised id="clearall_follow" class="block nodecg-warning">Clear All</paper-button>
