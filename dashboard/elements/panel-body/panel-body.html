@@ -1,0 +1,128 @@
+
+<script src="../bower_components/webcomponentsjs/webcomponents-lite.min.js"></script>
+<link rel="stylesheet" href="../bower_components/paper-styles/paper-styles.html">
+<link rel="import" href="../bower_components/boe-list/boe-list.html">
+<link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="../bower_components/iron-icons/social-icons.html">
+<link rel="import" href="../bower_components/iron-icons/image-icons.html">
+<link rel="import" href="../bower_components/paper-item/paper-item.html">
+<link rel="stylesheet" href="panel.css">
+<script src="../bower_components/jquery/dist/jquery.min.js"></script>
+
+<dom-module id="panel-body">
+	<style>
+		.list-container {
+			display: flex;
+		}
+		.column {
+			flex:1;
+		}
+
+		.stats-container {
+			display: flex;
+		}
+
+		.stat {
+			padding: 5px;
+			flex:0.15;
+		}
+
+		.stat iron-icon {
+			padding-right:5px;
+		}
+
+		.column:first-of-type {
+			margin-right: 15px;
+			margin-left: 0;
+		}
+
+		.log-message:nth-child(even) {
+			background-color: #DDDDDD;
+		}
+
+		paper-item {
+			padding:0px;
+		}
+		paper-item-body {
+			flex:2;
+		}
+		boe-list {
+			margin-bottom: 4px;
+			font-size:0.8em;
+			overflow: scroll;
+		}
+
+		boe-list paper-icon {
+			width:35px;
+			height:35px;
+		}
+
+		boe-list paper-item {
+			min-height:0px;
+		}
+
+		boe-list paper-item-body {
+			display: flex;
+		}
+
+		boe-list paper-item-body span:first-of-type {
+			flex:1;
+		}
+
+		paper-button.block {
+			display: block;
+		}
+
+		::-webkit-scrollbar {
+			width: 8px;
+		}
+		::-webkit-scrollbar-button {
+			width: 0px;
+			height:0px;
+		}
+		::-webkit-scrollbar-track {
+			background:transparent;
+			border:transparent;
+		}
+		::-webkit-scrollbar-thumb {
+			background:#C5C5C5;
+			border-radius:15px;
+		}
+		::-webkit-scrollbar-thumb:hover {
+			background:#7d7d7d;
+		}
+	</style>
+	<template>
+		<div class="stats-container">
+			<div class="stat">
+				<iron-icon icon="image:remove-red-eye"></iron-icon><span class="viewers">00</span>
+			</div>
+			<div class="stat">
+				<iron-icon icon="social:people"></iron-icon> <span class="followers">00</span>
+			</div>
+		</div>
+		<div class="list-container">
+			<div class="column">
+				<h4 style="margin-top: 0;" class="">Recent Subs</h4>
+				<boe-list empty-msg="No Recent Subscriptions" id="subscription_list">
+					<template is="dom-repeat" items="[[subscribers]]" sort="newestFirst" as="item">
+						<list-event item="[[item]]"></list-event>
+					</template>
+				</boe-list>
+				<paper-button raised id="clearall_sub" class="block nodecg-warning">Clear All</paper-button>
+			</div>
+			<div class="column">
+				<h4 style="margin-top: 0;" class="">Recent Follows</h4>
+				<boe-list empty-msg="No Recent Follows" id="follow_list">
+					<template is="dom-repeat" items="[[followers]]" sort="newestFirst" as="item">
+						<list-event item="[[item]]"></list-event>
+					</template>
+				</boe-list>
+				<paper-button raised id="clearall_follow" class="block nodecg-warning">Clear All</paper-button>
+			</div>
+		</div>
+	</template>
+	<script src="panel-body.js"></script>
+</dom-module>
