@@ -12,6 +12,7 @@ const HOST = 'host';
 module.exports = function (extensionApi) {
 	const nodecg = extensionApi;
 	const live = new LiveLoading(nodecg);
+
 	if (!nodecg.bundleConfig || !Object.keys(nodecg.bundleConfig).length) {
 		throw new Error('No config found in cfg/nodecg-mixer.json, aborting!');
 	}
@@ -61,16 +62,17 @@ module.exports = function (extensionApi) {
 	};
 
 	function addChannels() {
-		var self = this;
 		nodecg.bundleConfig.channels.forEach(channelName => {
-			if (channelCache[channelName] === undefined) {
-				var channel = new Channel(channelName, nodecg, live);
-				channel.on(FOLLOW, onFollow.bind(self, channelName));
-				channel.on(SUBSCRIPTION, onSub.bind(self, channelName));
-				channel.on('update', onUpdate.bind(self, channelName));
-				channel.on(HOST, onHost.bind(self, channelName));
-				channelCache[channelName] = channel;
+			if (channelCache[channelName] !== undefined) {
+				return;
 			}
+
+			const channel = new Channel(channelName, nodecg, live);
+			channel.on(FOLLOW, onFollow.bind(this, channelName));
+			channel.on(SUBSCRIPTION, onSub.bind(this, channelName));
+			channel.on('update', onUpdate.bind(this, channelName));
+			channel.on(HOST, onHost.bind(this, channelName));
+			channelCache[channelName] = channel;
 		});
 	}
 
