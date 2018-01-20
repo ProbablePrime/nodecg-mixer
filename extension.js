@@ -9,7 +9,7 @@ module.exports = function (extensionApi) {
 	const nodecg = extensionApi;
 	const live = new LiveLoading(nodecg);
 	if (!nodecg.bundleConfig || !Object.keys(nodecg.bundleConfig).length) {
-		throw new Error('No config found in cfg/nodecg-beam.json, aborting!');
+		throw new Error('No config found in cfg/nodecg-mixer.json, aborting!');
 	}
 
 	if (!nodecg.bundleConfig.channels) {

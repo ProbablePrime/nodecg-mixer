@@ -1,13 +1,11 @@
 {
-  "name": "nodecg-beam",
+  "name": "nodecg-mixer",
   "version": "4.0.1",
   "homepage": "http://probableprime.co.uk",
   "author": "Richard Fox",
-  "description": "Hook into Beam Events and emit them to NodeCG channels",
+  "description": "Hook into Mixer Events and emit them to NodeCG channels",
   "license": "GPL",
   "dependencies": {
-    "beam-client-node": "^0.1.2",
-    "bluebird": "^3.3.3",
     "carina": "^0.5.3",
     "lodash": "^4.16.4",
     "nedb": "^1.8.0",
@@ -17,11 +15,11 @@
     "wsabi-client-bacon": "^0.2.1"
   },
   "nodecg": {
-    "compatibleRange": "~0.8.0",
+    "compatibleRange": "~0.9.0",
     "dashboardPanels": [
       {
-        "name": "beam",
-        "title": "Beam",
+        "name": "mixer",
+        "title": "Mixer",
         "width": 4,
         "headerColor": "#262262",
         "file": "panel.html"
