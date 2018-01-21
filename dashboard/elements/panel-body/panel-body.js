@@ -1,4 +1,4 @@
-(function () {
+(function() {
 	'use strict';
 	Polymer({
 		is: 'panel-body',
@@ -14,9 +14,13 @@
 			}
 		},
 		ready() {
-			nodecg.sendMessage('getChannelData','ProbablePrime', (err, result) => {
-				this.onUpdate(result,result);
-			})
+			nodecg.sendMessage(
+				'getChannelData',
+				'ProbablePrime',
+				(err, result) => {
+					this.onUpdate(result, result);
+				}
+			);
 
 			nodecg.sendMessage('getFollows', '', (err, f) => {
 				if (f) {
@@ -44,9 +48,7 @@
 			}
 			this.push('follows', item);
 		},
-		onUpdate() {
-
-		},
+		onUpdate() {},
 		itemDismissed(e) {
 			const item = e.detail.item;
 			nodecg.sendMessage('dismiss', item);

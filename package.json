@@ -4,6 +4,9 @@
   "homepage": "http://probableprime.co.uk",
   "author": "Richard Fox",
   "description": "Hook into Mixer Events and emit them to NodeCG channels",
+  "scripts": {
+    "fmt": "prettier --write **/*.js"
+  },
   "license": "GPL",
   "dependencies": {
     "carina": "^0.5.3",
@@ -25,5 +28,13 @@
         "file": "panel.html"
       }
     ]
+  },
+  "devDependencies": {
+    "prettier": "1.10.2"
+  },
+  "prettier": {
+    "singleQuote": true,
+    "tabWidth": 4,
+    "useTabs": true
   }
 }

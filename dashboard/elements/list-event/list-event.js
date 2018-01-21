@@ -1,4 +1,4 @@
-(function () {
+(function() {
 	'use strict';
 	function capitalizeFirstLetter(string) {
 		return string.charAt(0).toUpperCase() + string.slice(1);
@@ -21,7 +21,10 @@
 		},
 		resend() {
 			console.log('resend');
-			nodecg.sendMessage(this.item.type, Object.assign({}, this.item, { replay: true }));
+			nodecg.sendMessage(
+				this.item.type,
+				Object.assign({}, this.item, { replay: true })
+			);
 		}
 	});
 })();

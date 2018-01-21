@@ -4,12 +4,9 @@ const LiveLoading = require('./lib/Live.js');
 const channelCache = {};
 
 const toArray = require('object-values-to-array');
+const { FOLLOW, HOST, SUBSCRIPTION } = require('./lib/util');
 
-const SUBSCRIPTION = 'subscription';
-const FOLLOW = 'follow';
-const HOST = 'host';
-
-module.exports = function (extensionApi) {
+module.exports = function(extensionApi) {
 	const nodecg = extensionApi;
 	const live = new LiveLoading(nodecg);
 
@@ -25,41 +22,19 @@ module.exports = function (extensionApi) {
 		nodecg.log.info(msg);
 		nodecg.sendMessage('log', msg);
 	}
-
-	function onFollow(channelName, username) {
-		log(`Follow: ${username}`);
-		nodecg.sendMessage(FOLLOW, {
+	function onEvent(channel, type, username, ts) {
+		log(`${type}: username`);
+		nodecg.sendMessage(type, {
 			username,
-			type: FOLLOW,
-			channel: channelName,
-			ts: Date.now()
-		});
-	};
-
-	function onSub(channelName, username, ts) {
-		var content = {
-			username,
-			type: SUBSCRIPTION,
-			channel: channelName,
-			ts: ts
-		};
-		log(`Sub: ${username}`);
-		nodecg.sendMessage(SUBSCRIPTION, content);
-	};
-
-	function onHost(channelName, hoster, ts) {
-		log(`Host: ${hoster}`);
-		nodecg.sendMessage(HOST, {
-			username,
-			type: HOST,
-			channel: channelName,
-			ts: ts
+			type,
+			channel,
+			ts: ts ? ts : Date.now()
 		});
 	}
 
 	function onUpdate(channel, data) {
 		nodecg.sendMessage('update', channel, data);
-	};
+	}
 
 	function addChannels() {
 		nodecg.bundleConfig.channels.forEach(channelName => {
@@ -68,10 +43,13 @@ module.exports = function (extensionApi) {
 			}
 
 			const channel = new Channel(channelName, nodecg, live);
-			channel.on(FOLLOW, onFollow.bind(this, channelName));
-			channel.on(SUBSCRIPTION, onSub.bind(this, channelName));
-			channel.on('update', onUpdate.bind(this, channelName));
-			channel.on(HOST, onHost.bind(this, channelName));
+			channel.on(FOLLOW, onEvent.bind(this, channelName, FOLLOW));
+			channel.on(
+				SUBSCRIPTION,
+				onEvent.bind(this, channelName, SUBSCRIPTION)
+			);
+			channel.on('update', onUpdate.bind(this, channelName, 'update'));
+			channel.on(HOST, onEvent.bind(this, channelName, HOST));
 			channelCache[channelName] = channel;
 		});
 	}
@@ -89,41 +67,39 @@ module.exports = function (extensionApi) {
 			func = 'findUnDismissedSubscriptions';
 		}
 		const promises = eachChannel(channel => channel[func]());
-		Promise.all(promises).then(result => {
-			const combinedArray = result
-				.reduce((previous, next) => previous.concat(next), [])
-				.map(item => {
-					return {
-						username: item.username,
-						type,
-						ts: item[type].ts ? item[type].ts : 0,
-						channel: 0,
-					};
-				});
-			cb(null, combinedArray);
-		}).catch(err => {
-			this.nodecg.log.error(err);
-			cb(err, [])
-		});
+		Promise.all(promises)
+			.then(result => {
+				const combinedArray = result
+					.reduce((previous, next) => previous.concat(next), [])
+					.map(item => {
+						return {
+							username: item.username,
+							type,
+							ts: item[type].ts ? item[type].ts : 0,
+							channel: 0
+						};
+					});
+				cb(null, combinedArray);
+			})
+			.catch(err => {
+				this.nodecg.log.error(err);
+				cb(err, []);
+			});
 	}
 
-	nodecg.listenFor('getFollows', function (value, cb) {
+	nodecg.listenFor('getFollows', function(value, cb) {
 		getUnDismissed(FOLLOW, cb);
 	});
 	nodecg.listenFor('getChannelData', function(value, cb) {
 		cb(null, channelCache[value].data);
 	});
 
-	nodecg.listenFor('getSubscriptions', function (value, cb) {
+	nodecg.listenFor('getSubscriptions', function(value, cb) {
 		getUnDismissed(SUBSCRIPTION, cb);
 	});
 
-	nodecg.listenFor('dismiss', function (value) {
-		if(value.type === FOLLOW) {
-			eachChannel((channel) => channel.dismissFollow(value.username));
-		} else {
-			eachChannel((channel) => channel.dismissSubscription(value.username));
-		}
+	nodecg.listenFor('dismiss', function(value) {
+		eachChannel(channel => channel.dismissEvent(value));
 	});
 
 	addChannels();
