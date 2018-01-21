@@ -36,22 +36,24 @@ module.exports = function(extensionApi) {
 		nodecg.sendMessage('update', channel, data);
 	}
 
-	function addChannels() {
-		nodecg.bundleConfig.channels.forEach(channelName => {
-			if (channelCache[channelName] !== undefined) {
-				return;
-			}
+	function addChannel(channelName) {
+		if (channelCache[channelName] !== undefined) {
+			return;
+		}
 
-			const channel = new Channel(channelName, nodecg, live);
-			channel.on(FOLLOW, onEvent.bind(this, channelName, FOLLOW));
-			channel.on(
-				SUBSCRIPTION,
-				onEvent.bind(this, channelName, SUBSCRIPTION)
-			);
-			channel.on('update', onUpdate.bind(this, channelName, 'update'));
-			channel.on(HOST, onEvent.bind(this, channelName, HOST));
-			channelCache[channelName] = channel;
-		});
+		const channel = new Channel(channelName, nodecg, live);
+		channel.on(FOLLOW, onEvent.bind(this, channelName, FOLLOW));
+		channel.on(
+			SUBSCRIPTION,
+			onEvent.bind(this, channelName, SUBSCRIPTION)
+		);
+		channel.on('update', onUpdate.bind(this, channelName, 'update'));
+		channel.on(HOST, onEvent.bind(this, channelName, HOST));
+		channelCache[channelName] = channel;
+	}
+
+	function addChannels() {
+		nodecg.bundleConfig.channels.forEach(channelName => addChannel(channelName));
 	}
 
 	function eachChannel(func) {
