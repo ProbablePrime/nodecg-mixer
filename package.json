@@ -14,8 +14,7 @@
     "nedb": "^1.8.0",
     "node-fetch": "^1.6.3",
     "node-localstorage": "^1.0.0",
-    "object-values-to-array": "^1.0.0",
-    "wsabi-client-bacon": "^0.2.1"
+    "object-values-to-array": "^1.0.0"
   },
   "nodecg": {
     "compatibleRange": "~0.9.0",

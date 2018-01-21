@@ -1,5 +1,5 @@
 {
-  "name": "nodecg-beam",
+  "name": "nodecg-mixer",
   "dependencies": {
     "paper-button": "PolymerElements/paper-button#^1.0.3",
     "jquery": "~2.2.0",
