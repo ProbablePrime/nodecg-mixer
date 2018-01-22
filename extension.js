@@ -28,7 +28,7 @@ module.exports = function(extensionApi) {
 			username,
 			type,
 			channel,
-			ts: ts ? ts : Date.now()
+			ts: ts ? ts : Date.now(),
 		});
 	}
 
@@ -43,17 +43,16 @@ module.exports = function(extensionApi) {
 
 		const channel = new Channel(channelName, nodecg, live);
 		channel.on(FOLLOW, onEvent.bind(this, channelName, FOLLOW));
-		channel.on(
-			SUBSCRIPTION,
-			onEvent.bind(this, channelName, SUBSCRIPTION)
-		);
+		channel.on(SUBSCRIPTION, onEvent.bind(this, channelName, SUBSCRIPTION));
 		channel.on('update', onUpdate.bind(this, channelName, 'update'));
 		channel.on(HOST, onEvent.bind(this, channelName, HOST));
 		channelCache[channelName] = channel;
 	}
 
 	function addChannels() {
-		nodecg.bundleConfig.channels.forEach(channelName => addChannel(channelName));
+		nodecg.bundleConfig.channels.forEach(channelName =>
+			addChannel(channelName),
+		);
 	}
 
 	function eachChannel(func) {
@@ -78,7 +77,7 @@ module.exports = function(extensionApi) {
 							username: item.username,
 							type,
 							ts: item[type].ts ? item[type].ts : 0,
-							channel: 0
+							channel: 0,
 						};
 					});
 				cb(null, combinedArray);

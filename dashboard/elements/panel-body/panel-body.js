@@ -2,16 +2,15 @@
 	'use strict';
 	Polymer({
 		is: 'panel-body',
-
 		properties: {
 			followers: {
 				type: Array,
-				value: []
+				value: [],
 			},
 			subscriptions: {
 				type: Array,
-				value: []
-			}
+				value: [],
+			},
 		},
 		ready() {
 			nodecg.sendMessage(
@@ -19,7 +18,7 @@
 				'ProbablePrime',
 				(err, result) => {
 					this.onUpdate(result, result);
-				}
+				},
 			);
 
 			nodecg.sendMessage('getFollows', '', (err, f) => {
@@ -61,6 +60,6 @@
 			if (item.type === 'subscription') {
 				this.arrayDelete('subscriptions', item);
 			}
-		}
+		},
 	});
 })();
